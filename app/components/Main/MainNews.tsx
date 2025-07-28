@@ -1,5 +1,11 @@
-import React from 'react';
-import { FlatList, ImageBackground, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+	FlatList,
+	ImageBackground,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import styles from './style';
 
 interface newstype {
@@ -40,6 +46,7 @@ export default function MainNews() {
 				'https://images.pexels.com/photos/31160065/pexels-photo-31160065.jpeg?_gl=1*11il1s6*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxOTYkajEyJGwwJGgw',
 		},
 	];
+	const [counter, setCounter] = useState(news);
 	function renderNews({ item }: { item: newstype }) {
 		return (
 			<ImageBackground
@@ -54,14 +61,32 @@ export default function MainNews() {
 			</ImageBackground>
 		);
 	}
+	function AddNew(prev: any) {
+		const AddTheNews = {
+			id: 1,
+			title: 'this is 1 item title',
+			image:
+				'https://images.pexels.com/photos/14846793/pexels-photo-14846793.jpeg?_gl=1*1tys23i*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxMzEkajE0JGwwJGgw',
+		};
+		return setCounter((prev) => [...prev, AddTheNews]);
+	}
 	return (
-		<FlatList
-			data={news}
-			renderItem={({ item }) => renderNews({ item })}
-			horizontal={true}
-			showsHorizontalScrollIndicator={false}
-			pagingEnabled
-			style={styles.containerstyle}
-		/>
+		<View>
+			<FlatList
+				data={counter}
+				renderItem={({ item }) => renderNews({ item })}
+				horizontal={true}
+				showsHorizontalScrollIndicator={false}
+				pagingEnabled
+				style={styles.containerstyle}
+			/>
+			<View style={styles.btncounter}>
+				<TouchableOpacity
+					style={styles.button}
+					onPress={AddNew}>
+					Add New
+				</TouchableOpacity>
+			</View>
+		</View>
 	);
 }

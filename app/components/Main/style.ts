@@ -28,6 +28,21 @@ const styles = StyleSheet.create({
 	containerstyle: {
 		marginVertical: 30,
 	},
+	btncounter: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	button: {
+		marginTop: 15,
+		backgroundColor: '#0f0',
+		padding: 10,
+		borderRadius: 10,
+		fontWeight: 'bold',
+		color: '#fff',
+		width: 100,
+		textAlign: 'center',
+	},
 });
 
 export default styles;

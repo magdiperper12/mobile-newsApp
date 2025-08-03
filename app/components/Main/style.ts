@@ -7,6 +7,8 @@ const styles = StyleSheet.create({
 		overflow: 'hidden',
 		marginHorizontal: 20,
 		width: 300,
+		height: 290,
+		overflowY: 'hidden',
 	},
 	whitecontainer: {
 		backgroundColor: 'rgba(255 ,255, 255, 0.75)',
@@ -16,9 +18,18 @@ const styles = StyleSheet.create({
 	},
 	deadlinetext: {
 		backgroundColor: 'red',
-		width: 100,
+		width: 110,
 		textAlign: 'center',
 		color: '#fff',
+		fontSize: 16,
+		fontWeight: 'bold',
+		marginTop: 20,
+		padding: 3,
+		borderRadius: 5,
+	},
+	source: {
+		textAlign: 'center',
+		color: '#000',
 		fontSize: 16,
 		fontWeight: 'bold',
 	},

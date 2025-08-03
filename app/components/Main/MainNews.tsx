@@ -1,75 +1,79 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import {
 	FlatList,
 	ImageBackground,
+	Linking,
 	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native';
 import styles from './style';
-
 interface newstype {
-	id: number;
-	title: string;
-	image: string;
+	source: any;
+	author: string;
+	urlToImage: string;
+	description: string;
+	url: string;
 }
+
 export default function MainNews() {
-	const news = [
-		{
-			id: 1,
-			title: 'this is 1 item title',
-			image:
-				'https://images.pexels.com/photos/1884574/pexels-photo-1884574.jpeg?_gl=1*1ru2vc0*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkwNjEkajIwJGwwJGgw',
-		},
-		{
-			id: 2,
-			title: 'this is 2 item title',
-			image:
-				'https://images.pexels.com/photos/47730/the-ball-stadion-football-the-pitch-47730.jpeg?_gl=1*1vbiulz*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkwOTgkajQ3JGwwJGgw',
-		},
-		{
-			id: 3,
-			title: 'this is 3 item title',
-			image:
-				'https://images.pexels.com/photos/14846793/pexels-photo-14846793.jpeg?_gl=1*1tys23i*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxMzEkajE0JGwwJGgw',
-		},
-		{
-			id: 4,
-			title: 'this is 4 item title',
-			image:
-				'https://images.pexels.com/photos/32879093/pexels-photo-32879093.jpeg?_gl=1*106sslg*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxNTIkajU2JGwwJGgw',
-		},
-		{
-			id: 5,
-			title: 'this is 5 item title',
-			image:
-				'https://images.pexels.com/photos/31160065/pexels-photo-31160065.jpeg?_gl=1*11il1s6*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxOTYkajEyJGwwJGgw',
-		},
-	];
-	const [counter, setCounter] = useState(news);
+	const [counter, setCounter] = useState([]);
+	useEffect(() => {
+		getnews();
+	}, []);
+
+	function getnews() {
+		const url =
+			'https://newsapi.org/v2/top-headlines?country=us&apiKey=564919c9498a43ff9374b9bee93ab540';
+		axios
+			.get(url)
+			.then((res) => {
+				console.log('this is your news data : ', res.data);
+				const articles = res.data?.articles;
+
+				setCounter(articles);
+			})
+			.catch((err) => {
+				console.log('ther is error ', err);
+			});
+	}
 	function renderNews({ item }: { item: newstype }) {
 		return (
 			<ImageBackground
 				source={{
-					uri: item.image,
+					uri: item.urlToImage
+						? item.urlToImage
+						: 'https://images.pexels.com/photos/14846793/pexels-photo-14846793.jpeg?_gl=1*1tys23i*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxMzEkajE0JGwwJGgw',
 				}}
 				style={styles.container}>
 				<View style={styles.whitecontainer}>
-					<Text style={styles.deadlinetext}>{`Deadline ${item.id}`}</Text>
-					<Text style={styles.newstext}>{item.title}</Text>
+					<Text style={styles.source}>
+						{item.source.name ? item.source.name : 'no name'}
+					</Text>
+					<Text
+						style={styles.newstext}
+						numberOfLines={2}>
+						{item.description ? item.description : 'go to him page'}
+					</Text>
+					<TouchableOpacity
+						style={styles.deadlinetext}
+						onPress={() => Linking.openURL(item.url)}>
+						{'View Source'}
+					</TouchableOpacity>
 				</View>
 			</ImageBackground>
 		);
 	}
-	function AddNew(prev: any) {
-		const AddTheNews = {
-			id: 1,
-			title: 'this is 1 item title',
-			image:
-				'https://images.pexels.com/photos/14846793/pexels-photo-14846793.jpeg?_gl=1*1tys23i*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxMzEkajE0JGwwJGgw',
-		};
-		return setCounter((prev) => [...prev, AddTheNews]);
-	}
+	// function AddNew(prev: any) {
+	// 	const AddTheNews = {
+	// 		id: 1,
+	// 		title: 'this is 1 item title',
+	// 		image:
+	// 			'https://images.pexels.com/photos/14846793/pexels-photo-14846793.jpeg?_gl=1*1tys23i*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxMzEkajE0JGwwJGgw',
+	// 	};
+	// 	return setCounter((prev) => [...prev, AddTheNews]);
+	// }
 	return (
 		<View>
 			<FlatList
@@ -78,15 +82,16 @@ export default function MainNews() {
 				horizontal={true}
 				showsHorizontalScrollIndicator={false}
 				pagingEnabled
+				alwaysBounceVertical={true}
 				style={styles.containerstyle}
 			/>
-			<View style={styles.btncounter}>
+			{/* <View style={styles.btncounter}>
 				<TouchableOpacity
 					style={styles.button}
 					onPress={AddNew}>
 					Add New
 				</TouchableOpacity>
-			</View>
+			</View> */}
 		</View>
 	);
 }

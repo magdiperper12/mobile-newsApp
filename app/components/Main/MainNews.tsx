@@ -1,33 +1,24 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
 	FlatList,
 	ImageBackground,
 	Linking,
 	Text,
+	TextInput,
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import { get } from '../../util/helper/apiServices';
+import { newstype } from '../types/types';
 import styles from './style';
-interface newstype {
-	source: any;
-	author: string;
-	urlToImage: string;
-	description: string;
-	url: string;
-}
-
 export default function MainNews() {
-	const [counter, setCounter] = useState([]);
-	useEffect(() => {
-		getnews();
-	}, []);
+	const [counter, setCounter] = useState<newstype[]>([]);
+	const [text, setText] = useState<string>('');
 
-	function getnews() {
-		const url =
-			'https://newsapi.org/v2/top-headlines?country=us&apiKey=564919c9498a43ff9374b9bee93ab540';
-		axios
-			.get(url)
+	function getnews(searshText: string) {
+		const url = `/everything?q=${searshText}`;
+
+		get(url)
 			.then((res) => {
 				console.log('this is your news data : ', res.data);
 				const articles = res.data?.articles;
@@ -38,6 +29,7 @@ export default function MainNews() {
 				console.log('ther is error ', err);
 			});
 	}
+
 	function renderNews({ item }: { item: newstype }) {
 		return (
 			<ImageBackground
@@ -65,33 +57,63 @@ export default function MainNews() {
 			</ImageBackground>
 		);
 	}
-	// function AddNew(prev: any) {
-	// 	const AddTheNews = {
-	// 		id: 1,
-	// 		title: 'this is 1 item title',
-	// 		image:
-	// 			'https://images.pexels.com/photos/14846793/pexels-photo-14846793.jpeg?_gl=1*1tys23i*_ga*MTQ0MzUwNzY1LjE3NDk5MTc3MTQ.*_ga_8JE65Q40S6*czE3NTM2Mjg3OTkkbzUkZzEkdDE3NTM2MjkxMzEkajE0JGwwJGgw',
+	// function Addnews() {
+	// 	const AddTheNews: newstype = {
+	// 		source: { id: null, name: 'Manual' },
+	// 		author: 'You',
+	// 		urlToImage:
+	// 			'https://images.pexels.com/photos/14846793/pexels-photo-14846793.jpeg',
+	// 		description: 'This is a manually added news item.',
+	// 		url: 'https://example.com',
 	// 	};
-	// 	return setCounter((prev) => [...prev, AddTheNews]);
+	// 	setCounter((prev) => [...prev, AddTheNews]);
 	// }
+	function SkeltonPlaceholder() {
+		return (
+			<View>
+				<View style={styles.cover}></View>
+			</View>
+		);
+	}
 	return (
-		<View>
-			<FlatList
-				data={counter}
-				renderItem={({ item }) => renderNews({ item })}
-				horizontal={true}
-				showsHorizontalScrollIndicator={false}
-				pagingEnabled
-				alwaysBounceVertical={true}
-				style={styles.containerstyle}
+		<View style={{ paddingBottom: 20 }}>
+			<TextInput
+				style={styles.inputtext}
+				value={text}
+				onChangeText={setText}
 			/>
-			{/* <View style={styles.btncounter}>
+			<View style={styles.btncounter}>
 				<TouchableOpacity
 					style={styles.button}
-					onPress={AddNew}>
-					Add New
+					onPress={() => getnews(text)}>
+					Search
 				</TouchableOpacity>
-			</View> */}
+			</View>
+			{counter.length === 0 ? (
+				<FlatList
+					data={[1, 2]}
+					renderItem={SkeltonPlaceholder}
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					style={{ display: 'flex', flexDirection: 'row' }}></FlatList>
+			) : (
+				<FlatList
+					data={counter}
+					renderItem={({ item }) => renderNews({ item })}
+					horizontal={true}
+					keyExtractor={(item, index) => item.url + index}
+					showsHorizontalScrollIndicator={false}
+					pagingEnabled
+					alwaysBounceVertical={true}
+					style={styles.containerstyle}
+				/>
+			)}
+
+			{/* <TouchableOpacity
+				style={styles.button}
+				onPress={Addnews}>
+				Add New
+			</TouchableOpacity> */}
 		</View>
 	);
 }

@@ -10,6 +10,15 @@ const styles = StyleSheet.create({
 		height: 290,
 		overflowY: 'hidden',
 	},
+	cover: {
+		width: 300,
+		height: 290,
+		marginHorizontal: 20,
+		borderRadius: 10,
+		overflow: 'hidden',
+		marginTop: 20,
+		backgroundColor: '#ccc',
+	},
 	whitecontainer: {
 		backgroundColor: 'rgba(255 ,255, 255, 0.75)',
 		marginTop: 100,
@@ -53,6 +62,19 @@ const styles = StyleSheet.create({
 		color: '#fff',
 		width: 100,
 		textAlign: 'center',
+	},
+	inputtext: {
+		borderColor: 'blue',
+		borderWidth: 1,
+		padding: 6,
+		marginHorizontal: 20,
+		marginVertical: 10,
+		borderRadius: 10,
+		outlineColor: 'gray',
+		textAlign: 'center',
+		fontSize: 20,
+		fontWeight: 'bold',
+		color: 'red',
 	},
 });
 

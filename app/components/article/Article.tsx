@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, SafeAreaView, Text, View } from 'react-native';
+import { get } from '../../util/helper/apiServices';
 import styles from './style';
 export default function Article() {
 	const [counter, setCounter] = useState([]);
@@ -10,10 +10,9 @@ export default function Article() {
 	}, []);
 
 	function getData() {
-		const url =
-			'https://newsapi.org/v2/top-headlines?country=us&apiKey=564919c9498a43ff9374b9bee93ab540';
-		axios
-			.get(url)
+		const url = '/top-headlines?country=us';
+
+		get(url)
 			.then((res) => {
 				console.log('Articles:', res.data.articles);
 				setCounter(res.data.articles || []);

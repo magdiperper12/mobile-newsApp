@@ -10,7 +10,8 @@ export default function Textinput() {
 		<View>
 			<TextInput
 				style={styles.inputFaild}
-				onChangeText={(text) => setText(text)}
+				value={text}
+				onChangeText={setText}
 			/>
 			<View style={styles.buttonStyle}>
 				<Button
